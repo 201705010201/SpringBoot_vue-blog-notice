@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Vue 实例</title>
+    <script src="https://cdn.staticfile.org/vue/2.4.2/vue.min.js"></script>
+    <script src="https://cdn.staticfile.org/vue-router/2.7.0/vue-router.min.js"></script>
+   
+    <script src="https://unpkg.com/axios/dist/axios.min.js"> </script>
+
+    <link rel="stylesheet" type="text/css"
+        href="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/css/bootstrap.min.css">
+
+    <script src="js/vue-html5-editor.js"></script>
+    <link href="https://cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div id="app">
+        <!-- 路由匹配到的组件将渲染在这里 -->
+        <router-view></router-view>
+    </div>
+    
+    <!--引入组建-->
+    <script src="components/articles.js"></script>
+    <script src="components/detail.js"></script>
+    <script src="components/noticeDetail.js"></script>
+
+    <!--引入路由-->
+    <script src="router/router.js"></script>
+
+    <!--引入全局变量-->
+    <script src="store/store.js"></script>
+
+    <script>
+        // 创建和挂载根实例。
+        // 记得要通过 router 配置参数注入路由，
+        // 从而让整个应用都有路由功能
+
+        const app = new Vue({
+            el: '#app',
+            router
+        })
+
+        Vue.use(VueHtml5Editor, {
+            showModuleName: false,//是否显示图标的含义
+            image: {
+                // 文件最大体积，单位字节  max file size
+                sizeLimit: 512 * 1024,
+                //图片压缩
+                compress: true,
+                width: 500,
+                height: 500,
+                quality: 80,
+
+                // 上传参数,默认把图片转为base64而不上传
+                // upload config,default null and convert image to base64
+
+                upload: {
+                    url: 'http://localhost:8080/articles/file',
+                    headers: {},
+                    params: {},
+                    fieldName: 'myfile'
+                },
+                // 响应数据处理,最终返回图片链接
+                // handle response data，return image url
+                uploadHandler(responseText) {
+                    // default accept json data like  {ok:false,msg:"unexpected"} or {ok:true,data:"image url"}
+                    //var json = JSON.parse(responseText)
+                    return 'http://localhost:8080/articles/' + responseText;
+                }
+            }
+        })
+
+    </script>
+
+</body>
+
+</html>
